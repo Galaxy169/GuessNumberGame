@@ -1,10 +1,9 @@
 "use strict";
 
-// Define Variables
-let message = document.querySelector(".message");
-let gameScore = document.querySelector(".score");
-let highscore = document.querySelector(".highscore");
+// Define Body
 let body = document.body.style;
+
+// Display Message Variables
 let startMessage = "Start guessing...";
 let validNumber = "Oops...It is not a number";
 let winMessage = "You win";
@@ -12,33 +11,36 @@ let closeNumber = "You are close";
 let lowNumber = "You entered a lower number";
 let highNumber = "You entered a higher number";
 let gameOver = "You lost the game!";
-//Define the score
+
+//Initilize the score and High Score
 let score = 20;
 let highScore = 0;
+
+// Display Messages, It takes two args: element/class/id name for dom and messages
+const displayMessages = (element, message) => {
+  return (document.querySelector(element).textContent = message);
+};
 
 // Generate Random Numbers
 let randomNumbers = () => {
   return Math.trunc(Math.random() * (20 - 1 + 1) + 1);
 };
+
 // Assign random number
 let randNum = randomNumbers();
-// Print the number to the "number" element
-//For debug, move it later
-document.querySelector(".number").textContent = randNum;
 
 // Reset Function
 const reset = () => {
-  //   score = 20;
+  score = 20;
+  displayMessages(".score", score);
   body.backgroundColor = "#222";
   document.querySelector(".guess").value = "";
-  message.textContent = startMessage;
+  displayMessages(".message", startMessage);
+  displayMessages(".number", "?");
   randNum = randomNumbers();
-  //For debug, remove it later
-  document.querySelector(".number").textContent = randNum;
 };
 
 // Add an event listener to the again button
-
 document.querySelector(".again").addEventListener("click", () => {
   reset();
 });
@@ -53,49 +55,59 @@ document.querySelector(".check").addEventListener("click", () => {
 
   // If the entered number is zero
   if (!inputValue) {
-    message.textContent = validNumber;
+    displayMessages(".message", validNumber);
+
     // when player wins. If the entered number is === to random number
   } else if (randNum === inputValue) {
     score++;
-    gameScore.textContent = score;
-    message.textContent = winMessage;
-    randNum = randomNumbers();
+    displayMessages(".score", score);
+    displayMessages(".message", winMessage);
+    // randNum = randomNumbers();
+    displayMessages(".number", randNum);
 
     // Change Body Color.
     body.backgroundColor = "#0b9a25";
     if (score > highScore) {
       highScore = score;
-      highscore.textContent = highScore;
+      displayMessages(".highscore", highScore);
     }
+
     // Check if the input number is close to the random number +5 and -5
   } else if (diffrence <= 5) {
     // If score is not zero
     if (score > 1) {
-      message.textContent = closeNumber;
+      displayMessages(".message", closeNumber);
+
       // Decrement the score by 1
       score--;
-      gameScore.textContent = score;
+      displayMessages(".score", score);
+
       // If the score is zero
     } else {
-      message.textContent = gameOver;
+      displayMessages(".message", gameOver);
       body.backgroundColor = "darkred";
+      displayMessages(".number", randNum);
     }
+
     // Check If the input number is greater than the random number
   } else if (inputValue != randNum) {
     // Check if the score is not zero
     if (score > 1) {
       //Check if the number is higher than random number then print highNumber otherwise print lowNumber
-      message.textContent = `${inputValue > randNum ? highNumber : lowNumber}`
+      displayMessages(".message", `${inputValue > randNum ? highNumber : lowNumber}`);
+
       // Decrement the score by 1
       score--;
-      gameScore.textContent = score;
+      displayMessages(".score", score);
+
       // If the score is zero
     } else {
-      message.textContent = gameOver;
+      displayMessages(".message", gameOver);
+      displayMessages(".number", randNum);
       body.backgroundColor = "darkred";
     }
     // Check If the input number is less than the random number
-   }
+  }
   // else if (inputValue < randNum) {
   //   // Check if the score is not zero
   //   if (score > 1) {
