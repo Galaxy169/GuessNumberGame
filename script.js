@@ -29,6 +29,13 @@ let randomNumbers = () => {
 // Assign random number
 let randNum = randomNumbers();
 
+// Generate a random threshold between 1-5
+
+let randomthreshold = () => {
+  return Math.trunc(Math.random() * 5) + 1;
+};
+let threshold = randomthreshold();
+
 // Reset Function
 const reset = () => {
   score = 20;
@@ -38,6 +45,7 @@ const reset = () => {
   displayMessages(".message", startMessage);
   displayMessages(".number", "?");
   randNum = randomNumbers();
+  threshold = randomthreshold();
 };
 
 // Add an event listener to the again button
@@ -51,7 +59,7 @@ document.querySelector(".check").addEventListener("click", () => {
   let inputValue = Number(document.querySelector(".guess").value);
 
   // Calculate and store the difference between random number and input number
-  let diffrence = Math.abs(randNum - inputValue);
+  let difference = Math.abs(randNum - inputValue);
 
   // If the entered number is zero
   if (!inputValue) {
@@ -72,8 +80,8 @@ document.querySelector(".check").addEventListener("click", () => {
       displayMessages(".highscore", highScore);
     }
 
-    // Check if the input number is close to the random number +5 and -5
-  } else if (diffrence <= 5) {
+    // Check if the difference is close to the random threshold max +5 and -5
+  } else if (difference <= threshold) {
     // If score is not zero
     if (score > 1) {
       displayMessages(".message", closeNumber);
