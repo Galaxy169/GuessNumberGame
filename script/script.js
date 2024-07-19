@@ -12,9 +12,10 @@ let lowNumber = "You entered a lower number";
 let highNumber = "You entered a higher number";
 let gameOver = "You lost the game!";
 
-//Initilize the score and High Score
+//Initilize the game
 let score = 20;
 let highScore = 0;
+let isPlaying = true; // track if the game is active
 
 // Display Messages, It takes two args: element/class/id name for dom and messages
 const displayMessages = (element, message) => {
@@ -46,6 +47,7 @@ const reset = () => {
   displayMessages(".number", "?");
   randNum = randomNumbers();
   threshold = randomthreshold();
+  isPlaying = true;
 };
 
 // Add an event listener to the again button
@@ -56,6 +58,7 @@ document.querySelector(".again").addEventListener("click", () => {
 //Add an event listener to the check button
 document.querySelector(".check").addEventListener("click", () => {
   // Store input value in a inputValue variable.
+  // if (!gameActive) return;
   let inputValue = Number(document.querySelector(".guess").value);
 
   // Calculate and store the difference between random number and input number
@@ -67,18 +70,22 @@ document.querySelector(".check").addEventListener("click", () => {
 
     // when player wins. If the entered number is === to random number
   } else if (randNum === inputValue) {
-    score++;
-    displayMessages(".score", score);
-    displayMessages(".message", winMessage);
-    // randNum = randomNumbers();
-    displayMessages(".number", randNum);
+    // Check if user is playing the game
+    if (isPlaying) {
+      score++;
+      displayMessages(".score", score);
+      displayMessages(".message", winMessage);
+      // randNum = randomNumbers();
+      displayMessages(".number", randNum);
 
-    // Change Body Color.
-    body.backgroundColor = "#0b9a25";
-    if (score > highScore) {
-      highScore = score;
-      displayMessages(".highscore", highScore);
+      // Change Body Color.
+      body.backgroundColor = "#0b9a25";
+      if (score > highScore) {
+        highScore = score;
+        displayMessages(".highscore", highScore);
+      }
     }
+    isPlaying = false; // Set to false because user is no longer playing the game.
 
     // Check if the difference is close to the random threshold max +5 and -5
   } else if (difference <= threshold) {
@@ -116,17 +123,4 @@ document.querySelector(".check").addEventListener("click", () => {
     }
     // Check If the input number is less than the random number
   }
-  // else if (inputValue < randNum) {
-  //   // Check if the score is not zero
-  //   if (score > 1) {
-  //     message.textContent = lowNumber;
-  //     // Decrement the score by 1
-  //     score--;
-  //     gameScore.textContent = score;
-  //     // If the score is zero
-  //   } else {
-  //     message.textContent = gameOver;
-  //     body.backgroundColor = "darkred";
-  //   }
-  // }
 });
